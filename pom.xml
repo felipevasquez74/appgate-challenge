@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.appgate</groupId>
-	<artifactId>appgate-challenge</artifactId>
+	<artifactId>appgate-social-media-analyzer</artifactId>
 	<version>0.0.1</version>
-	<name>appgate-challenge</name>
+	<name>appgate-social-media-analyzer</name>
 	<description>Code Refactoring Challenge</description>
 	<url />
 	<licenses>
