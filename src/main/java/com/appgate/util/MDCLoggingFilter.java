@@ -12,6 +12,6 @@ public class MDCLoggingFilter {
 	}
 
 	public static void builderMDC() {
-		MDC.put("requestId", UUID.randomUUID().toString());
+		MDC.put("spanId", UUID.randomUUID().toString());
 	}
 }

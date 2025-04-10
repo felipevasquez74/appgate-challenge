@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1/social-mention")
 @Slf4j
-@Tag(name = "Social Mention Analyzer", description = "API para analizar menciones en redes sociales")
+@Tag(name = "Social Mention Analyzer", description = "API for analyzing mentions on social networks")
 public class SocialMentionController {
 
 	private final SocialMentionService service;
@@ -34,7 +34,7 @@ public class SocialMentionController {
 	}
 
 	@PostMapping("/analyze")
-	@Operation(summary = "Analiza una mención social", description = "Determina si la mención social en Facebook o Twitter es de alto, medio o bajo riesgo")
+	@Operation(summary = "Analyze a social mention", description = "Determine whether the social mention on Facebook or Twitter is high, medium, or low risk")
 	public ResponseEntity<ApiResponse<Map<String, String>>> analyze(@Valid @RequestBody SocialMention socialMention,
 			HttpServletRequest request) {
 		MDCLoggingFilter.builderMDC();
