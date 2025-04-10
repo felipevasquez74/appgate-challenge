@@ -15,12 +15,16 @@ import com.appgate.service.SocialMentionService;
 import com.appgate.util.MDCLoggingFilter;
 import com.appgate.util.ResponseBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/social-mention")
 @Slf4j
+@Tag(name = "Social Mention Analyzer", description = "API para analizar menciones en redes sociales")
 public class SocialMentionController {
 
 	private final SocialMentionService service;
@@ -30,7 +34,8 @@ public class SocialMentionController {
 	}
 
 	@PostMapping("/analyze")
-	public ResponseEntity<ApiResponse<Map<String, String>>> analyze(@RequestBody SocialMention socialMention,
+	@Operation(summary = "Analiza una mención social", description = "Determina si la mención social en Facebook o Twitter es de alto, medio o bajo riesgo")
+	public ResponseEntity<ApiResponse<Map<String, String>>> analyze(@Valid @RequestBody SocialMention socialMention,
 			HttpServletRequest request) {
 		MDCLoggingFilter.builderMDC();
 		log.info("Request received {} ", socialMention);
