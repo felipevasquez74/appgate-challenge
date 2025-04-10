@@ -35,14 +35,17 @@ public class FacebookAnalyzerStrategy implements SocialMediaAnalyzerStrategy {
 				mention.getFacebookComments() != null ? mention.getFacebookComments() : List.of());
 		String fullMessage = "facebookMessage: " + mention.getMessage() + " || comments: " + comments;
 
-		double commentsScore = FacebookAnalyzer.calculateFacebookCommentsScore(fullMessage);
+		// Normaliza el mensaje completo
+		String normalizedMessage = TextNormalizer.normalize(fullMessage);
+
+		double commentsScore = FacebookAnalyzer.calculateFacebookCommentsScore(normalizedMessage);
 		log.debug("Facebook comments score: {}", commentsScore);
 
 		double postScore = commentsScore < 50 ? -100
-				: FacebookAnalyzer.analyzePost(fullMessage, mention.getFacebookAccount());
+				: FacebookAnalyzer.analyzePost(normalizedMessage, mention.getFacebookAccount());
 		log.debug("Facebook post score: {}", postScore);
 
-		repository.saveFacebookPost(postScore, fullMessage, mention.getFacebookAccount());
+		repository.saveFacebookPost(postScore, normalizedMessage, mention.getFacebookAccount());
 		log.info("Facebook post saved successfully");
 
 		return RiskLevel.fromFacebookScore(postScore);
