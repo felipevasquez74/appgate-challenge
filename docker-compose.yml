@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   appgate-challenge:
-    container_name: appgate-challenge
+    container_name: appgate-social-media-analyzer
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,8 +11,3 @@ services:
     environment:
       - TZ=America/Bogota
       - LOGBACK_CONF=/home/app/logback-spring.xml
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
