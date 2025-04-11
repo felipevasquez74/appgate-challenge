@@ -1,16 +1,15 @@
 package com.appgate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import com.appgate.model.SocialMention;
 import com.appgate.repository.SocialMentionRepository;
+import com.appgate.repository.entity.SocialMentionRecord;
 import com.appgate.service.strategy.TwitterAnalyzerStrategy;
 import com.appgate.util.RiskLevel;
 
@@ -29,7 +28,14 @@ class TwitterAnalyzerStrategyTest {
 		RiskLevel result = strategy.analyze(mention);
 
 		assertEquals(RiskLevel.LOW_RISK, result);
-		verify(repository).saveTweet(anyDouble(), anyString(), eq("https://twitter.com/status/123"),
-				eq("twitter_account"));
+
+		ArgumentCaptor<SocialMentionRecord> captor = ArgumentCaptor.forClass(SocialMentionRecord.class);
+		verify(repository).save(captor.capture());
+
+		SocialMentionRecord savedRecord = captor.getValue();
+
+		assertEquals("Twitter", savedRecord.getNetwork());
+		assertEquals("twitter_account", savedRecord.getAccount());
+		assertEquals("https://twitter.com/status/123", savedRecord.getUrl());
 	}
 }

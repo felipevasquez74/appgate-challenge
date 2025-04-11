@@ -1,5 +1,6 @@
 package com.appgate.service.strategy;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.appgate.model.SocialMention;
 import com.appgate.repository.SocialMentionRepository;
+import com.appgate.repository.entity.SocialMentionRecord;
 import com.appgate.util.RiskLevel;
 import com.appgate.util.TextNormalizer;
 import com.appgate.util.analyzer.FacebookAnalyzer;
@@ -45,8 +47,7 @@ public class FacebookAnalyzerStrategy implements SocialMediaAnalyzerStrategy {
 		log.debug("Final Facebook post score: {}", postScore);
 
 		if (postScore > -100) {
-			repository.saveFacebookPost(postScore, normalizedMessage, mention.getFacebookAccount());
-			log.info("Facebook post saved successfully for account: {}", mention.getFacebookAccount());
+			save(postScore, normalizedMessage, mention.getFacebookAccount());
 		}
 
 		return RiskLevel.fromFacebookScore(postScore);
@@ -66,5 +67,16 @@ public class FacebookAnalyzerStrategy implements SocialMediaAnalyzerStrategy {
 			return Double.sum(commentsScore, -100);
 		}
 		return FacebookAnalyzer.analyzePost(normalizedMessage, account);
+	}
+	
+	private void save(double postScore, String normalizedMessage, String facebookAccount) {
+		repository.save(SocialMentionRecord.builder()
+			    .network("Facebook")
+			    .score(postScore)
+			    .message(normalizedMessage)
+			    .account(facebookAccount)
+			    .analyzedAt(LocalDateTime.now())
+			    .build());
+		log.info("Facebook post saved successfully for account: {}", facebookAccount);
 	}
 }

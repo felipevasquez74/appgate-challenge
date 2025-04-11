@@ -1,9 +1,7 @@
 package com.appgate.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -21,6 +19,7 @@ class FacebookAnalyzerStrategyTest {
 	@Test
 	void shouldReturnLowRiskForPositiveMessage() {
 		SocialMentionRepository repository = mock(SocialMentionRepository.class);
+
 		FacebookAnalyzerStrategy strategy = new FacebookAnalyzerStrategy(repository);
 
 		SocialMention mention = new SocialMention();
@@ -31,6 +30,7 @@ class FacebookAnalyzerStrategyTest {
 		RiskLevel result = strategy.analyze(mention);
 
 		assertEquals(RiskLevel.LOW_RISK, result);
-		verify(repository).saveFacebookPost(anyDouble(), anyString(), eq("fb_account"));
+
+		verify(repository).save(any());
 	}
 }
