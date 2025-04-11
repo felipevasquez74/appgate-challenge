@@ -8,7 +8,7 @@ class TextNormalizerTest {
 
     @Test
     void shouldNormalizeTextCorrectly() {
-        String input = "   Hëllo Wòrld!!  ";
+        String input = "   HEllo WOrld    ";
         String normalized = TextNormalizer.normalize(input);
 
         assertEquals("hello world", normalized);

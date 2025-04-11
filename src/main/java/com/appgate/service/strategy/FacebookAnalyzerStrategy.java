@@ -1,6 +1,8 @@
 package com.appgate.service.strategy;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -31,23 +33,38 @@ public class FacebookAnalyzerStrategy implements SocialMediaAnalyzerStrategy {
 	public RiskLevel analyze(SocialMention mention) {
 		log.info("Starting Facebook analysis for account: {}", mention.getFacebookAccount());
 
-		String comments = String.join(" ",
-				mention.getFacebookComments() != null ? mention.getFacebookComments() : List.of());
-		String fullMessage = "facebookMessage: " + mention.getMessage() + " || comments: " + comments;
+		String combinedMessage = buildCombinedMessage(mention);
+		mention.setMessage(combinedMessage);
 
-		// Normaliza el mensaje completo
-		String normalizedMessage = TextNormalizer.normalize(fullMessage);
+		String normalizedMessage = TextNormalizer.normalize(combinedMessage);
 
 		double commentsScore = FacebookAnalyzer.calculateFacebookCommentsScore(normalizedMessage);
-		log.debug("Facebook comments score: {}", commentsScore);
+		log.debug("Calculated Facebook comments score: {}", commentsScore);
 
-		double postScore = commentsScore < 50 ? -100
-				: FacebookAnalyzer.analyzePost(normalizedMessage, mention.getFacebookAccount());
-		log.debug("Facebook post score: {}", postScore);
+		double postScore = determinePostScore(commentsScore, normalizedMessage, mention.getFacebookAccount());
+		log.debug("Final Facebook post score: {}", postScore);
 
-		repository.saveFacebookPost(postScore, normalizedMessage, mention.getFacebookAccount());
-		log.info("Facebook post saved successfully");
+		if (postScore > -100) {
+			repository.saveFacebookPost(postScore, normalizedMessage, mention.getFacebookAccount());
+			log.info("Facebook post saved successfully for account: {}", mention.getFacebookAccount());
+		}
 
 		return RiskLevel.fromFacebookScore(postScore);
+	}
+
+	private String buildCombinedMessage(SocialMention mention) {
+		String baseMessage = "facebookMessage: " + mention.getMessage();
+
+		String comments = Optional.ofNullable(mention.getFacebookComments()).orElse(Collections.emptyList()).stream()
+				.collect(Collectors.joining(" "));
+
+		return baseMessage + " || comments: " + comments;
+	}
+
+	private double determinePostScore(double commentsScore, String normalizedMessage, String account) {
+		if (commentsScore < 50) {
+			return Double.sum(commentsScore, -100);
+		}
+		return FacebookAnalyzer.analyzePost(normalizedMessage, account);
 	}
 }
