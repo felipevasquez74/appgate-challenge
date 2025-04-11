@@ -1,6 +1,8 @@
-## 🚀 Social Mention Analyzer
+# 🚀 Appgate Social Media Analyzer
 
 Análisis de menciones en redes sociales (Facebook y Twitter).
+
+---
 
 ## 📦 Descripción del Proyecto
 
@@ -20,10 +22,39 @@ Esta aplicación expone un endpoint REST para analizar menciones sociales, deter
 
 📖 Swagger OpenAPI para documentación de la API
 
-🐳 Preparada para contenerización con Docker
+🐳 Preparada para contenerización con Docker y docker-compose
 
-## 🚀 Cómo ejecutar
+# 🚀 Cómo ejecutar
 
+#### ✅ Requisitos previos
+
+- Tener Docker y Docker Compose instalados.
+
+- Git instalado en tu equipo.
+
+### 🖥️ Linux / MacOS
+```bash
+1. Clonar el repositorio
+gh repo clone felipevasquez74/appgate-challenge
+
+2. Ingresar al directorio del proyecto
+cd appgate-challenge/
+
+3. Construir y levantar el contenedor
+sudo docker-compose up --build
+```
+
+### 🖥️ Windows (CMD)
+```bash
+1. Clonar el repositorio
+gh repo clone felipevasquez74/appgate-challenge
+
+2. Ingresar al directorio del proyecto
+cd appgate-challenge
+
+3. Construir y levantar el contenedor
+docker-compose up --build
+```
 
 ## 📖 Acceso a la documentación de la API (Swagger)
 
@@ -39,7 +70,7 @@ Probar los endpoints directamente
 
 ## 🔌 Endpoints principales
 
-**POST** `/api/v1/social-mention/analyze`
+**POST** `http://localhost:8080/api/v1/social-mention/analyze`
 
 Analiza una mención social y devuelve el nivel de riesgo del contenido.
 

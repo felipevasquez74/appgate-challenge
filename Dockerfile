@@ -1,14 +1,24 @@
+# Etapa de construcción
+FROM maven:3.9.5-amazoncorretto-21-debian AS builder
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package
+
+# Etapa de producción
 FROM amazoncorretto:21-alpine3.17-jdk
 
 ENV TZ=America/Bogota
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-CMD ["mkdir", "/home/app/"]
-ADD ./target/appgate-social-media-analyzer*.jar /home/app/
-ADD ./target/classes/logback-spring.xml /home/app/logback-spring.xml
-RUN mv /home/app/appgate-social-media-analyzer*.jar /home/app/appgate-social-media-analyzer.jar
-ENV LOGBACK_CONF=/home/app/logback-spring.xml
+WORKDIR /home/app
+
+COPY --from=builder /app/target/appgate-social-media-analyzer*.jar appgate-social-media-analyzer.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/home/app/appgate-social-media-analyzer.jar", "-Dlogback.configurationFile=/home/app/logback-spring.xml"]
+ENTRYPOINT ["java", "-jar", "appgate-social-media-analyzer.jar"]
+

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  appgate-challenge:
+  appgate-social-media-analyzer:
     container_name: appgate-social-media-analyzer
     build:
       context: .
@@ -10,4 +10,3 @@ services:
       - "8080:8080"
     environment:
       - TZ=America/Bogota
-      - LOGBACK_CONF=/home/app/logback-spring.xml
