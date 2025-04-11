@@ -84,6 +84,14 @@ Analiza una mención social y devuelve el nivel de riesgo del contenido.
 }
 ```
 
+```json
+{
+  "message": "Check our promo!",
+  "tweeterAccount": "tw_account",
+  "tweeterUrl": https://tweeter.com
+}
+```
+
 ### 📤 Response Body Exitoso
 
 ```json
