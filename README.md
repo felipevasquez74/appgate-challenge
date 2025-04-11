@@ -14,6 +14,8 @@ Esta aplicación expone un endpoint REST para analizar menciones sociales, deter
 
 🧩 Spring Boot 3.3.4
 
+🐘 PostgreSQL 15 para persistencia de datos
+
 ✨ Lombok
 
 📝 SLF4J + MDC logging
@@ -23,6 +25,16 @@ Esta aplicación expone un endpoint REST para analizar menciones sociales, deter
 📖 Swagger OpenAPI para documentación de la API
 
 🐳 Preparada para contenerización con Docker y docker-compose
+
+## 🗄️ Arquitectura de Contenedores
+
+Al levantar el proyecto con Docker Compose, se levantan:
+
+- **appgate-social-media-analyzer**: Aplicación Java Spring Boot
+- **social-postgres**: Base de datos PostgreSQL 15 persistente en volumen Docker
+
+La aplicación espera a que la base de datos esté lista antes de iniciar ✅
+
 
 # 🚀 Cómo ejecutar
 
@@ -120,10 +132,22 @@ Analiza una mención social y devuelve el nivel de riesgo del contenido.
 
 ```
 
+## 🗃️ Acceso a la base de datos PostgreSQL
+
+La base de datos se levanta automáticamente con Docker Compose.
+
+- **Host:** `localhost`
+- **Puerto:** `5432`
+- **Base de datos:** `socialdb`
+- **Usuario:** `postgres`
+- **Contraseña:** `postgres`
+
+### 🔌 Conexión a la base de datos
+Puedes conectarte usando:
+
+- Un cliente como **DBeaver**, **pgAdmin**
 
 ## 📌 Extensiones futuras sugeridas
-
-🗃️ Persistencia real con base de datos (ej: Mysql, MongoDB)
 
 🛡️ Resiliencia con Resilience4j (Circuit Breaker, Retry)
 
