@@ -1,4 +1,3 @@
-# Etapa de construcción
 FROM maven:3.9.5-amazoncorretto-21-debian AS builder
 
 WORKDIR /app
@@ -8,7 +7,6 @@ COPY src ./src
 
 RUN mvn clean package
 
-# Etapa de producción
 FROM amazoncorretto:21-alpine3.17-jdk
 
 ENV TZ=America/Bogota
